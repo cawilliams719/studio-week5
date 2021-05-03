@@ -1,3 +1,6 @@
+This repository follows the below instructions from the [IDCE MSGIS Studio Week 5](https://github.com/IDCE-MSGIS/studio-week5) assignment repository. Some links will be broken since this is not the original repository nor was it forked from the original. 
+--
+
 # Welcome to the Studio Week 5!
 
 This week's studio includes two different tutorials to create the final product: one for getting and simplifying data and another for creating an interactive web map for humanitarian analysis using the data.
