@@ -55,21 +55,21 @@
 
     map.on('load', function () {
       // Map layers go here!
-    });
-    map.addLayer({
-      id: 'OSM-water',
-      source: {
-        type: 'geojson',
-        data: url
-      },
-      type: 'circle',
-      paint: {
-        'circle-color': '#83e8fc',
-        'circle-radius': 3,
-        'circle-opacity': 1,
-        'circle-stroke-width': 1,
-        'circle-stroke-color': '#0557fa',
-      }
+      map.addLayer({
+        id: 'OSM-water',
+        source: {
+          type: 'geojson',
+          data: url
+        },
+        type: 'circle',
+        paint: {
+          'circle-color': '#83e8fc',
+          'circle-radius': 3,
+          'circle-opacity': 1,
+          'circle-stroke-width': 1,
+          'circle-stroke-color': '#0557fa',
+        }
+      });
     });
 
     //Click event goes here!
