@@ -26,6 +26,7 @@
       top: 20px;
       left: 20px;
       background-color: #fff;
+      opacity: 0.9;
       padding: 5px 20px 5px 20px;
       border-radius: 10px;
       font-family: Lato, sans-serif;
@@ -42,8 +43,7 @@
   </div>
   <script>
     // Data showing water points - replace the dummy URL with your own.
-    var url = 'https://github.com/cawilliams719/studio-week5/blob/main/data/zaatari_water_tidy_data.geojson'
-
+    var url = 'https://raw.githubusercontent.com/cawilliams719/studio-week5/main/data/zaatari_water_tidy_data.geojson'
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2F3aWxsaWFtcyIsImEiOiJja2xsZ3pxdmczaDZjMndxZXB2aXdrdTZ3In0.TBD0QCuYQMkeamI_srV2XQ';
     var map = new mapboxgl.Map({
@@ -55,7 +55,8 @@
 
     map.on('load', function () {
       // Map layers go here!
-    });map.addLayer({
+    });
+    map.addLayer({
       id: 'OSM-water',
       source: {
         type: 'geojson',
@@ -70,21 +71,9 @@
         'circle-stroke-color': '#0557fa',
       }
     });
+
     //Click event goes here!
-    // When the map has finished loading, add a new layer that will be empty
-    // at first, but will eventually house our confirmed water sites.
-    map.addLayer({
-      id: 'selected-water',
-      source: {
-        type: 'geojson',
-        data: { "type": "FeatureCollection", "features": [] }
-      },
-      type: 'circle',
-      paint: {
-        'circle-color': 'red',
-        'circle-radius': 3
-         }
-    });
+
     //makeRadius function goes here!
 
     //spatialJoin function goes here!
