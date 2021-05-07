@@ -9,12 +9,12 @@
   <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet'/>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
       margin: 0;
       padding: 0;
     }
-
     #map {
       position: absolute;
       top: 0;
@@ -25,11 +25,61 @@
       position: absolute;
       top: 20px;
       left: 20px;
-      background-color: #fff;
-      opacity: 0.9;
+      width: 60%;
+      height: 125px;
+      overflow-y: scroll;
+      background-color: #fcfaf2;
+      opacity: 0.95;
       padding: 5px 20px 5px 20px;
-      border-radius: 10px;
+      border-radius: 8px;
       font-family: Lato, sans-serif;
+    }
+    /* Contact Information
+    /* LinkedIn */
+    .fa-linkedin {
+      background: #afb3b3;
+      color: white;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    /* LinkedIn */
+    .fa-github {
+      background: #afb3b3;
+      color: white;
+    }
+
+    .fa {
+      padding: 15px;
+      font-size: 15px;
+      width: 15px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 50%;
+      position: inherit;
+      bottom: -15px;
+      right: 15px;
+      float: left;
+      align-items: center;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .fa:hover {
+        transform: scale(1.2);
+    }
+
+    .fa-linkedin:hover {
+      color: white;
+      opacity: 1.0;
+      transform: scale(1.2);
+    }
+
+    /* LinkedIn */
+    .fa-github:hover {
+      color: white;
+      opacity: 1.0;
+      transform: scale(1.2);
     }
 
   </style>
@@ -40,6 +90,33 @@
   <div id="instructions">
     <h2>🚰 Instructions</h2>
     <p>Click anywhere on the map to see water sites within a 500m radius. Stand alone water sites will be highlighted in red.</p>
+    <h3>For More Information</h3>
+    <!-- Included links provided in the GitHub repository for this studio. --->
+    <!-- Additional or alternative links may be helpful for the user --->
+    <!-- Due to these uncertainties, contact infor is provideed for feedback. --->
+      <a href="https://data2.unhcr.org/en/situations/syria/location/53"><i></i>UNHCR Response</a> Click for the latest documentation <br></br>
+    <a href="https://spherestandards.org/"><i></i>Sphere Standards</a> See the Spehere Standards Home Page <br></br>
+    <a href="https://handbook.spherestandards.org/en/sphere/#ch006_004"><i></i>Sphere Standards Handbook</a> Click for water supply guidelines and recommendations<br>
+    <p></p>
+    <h3>Questions?</h3>
+    <!-- In this map, I wanted to add a number or count of water sites for --->
+    <!-- each time a user clicked a buffer. I wanted to adapt one of our first --->
+    <!-- tutorials https://docs.mapbox.com/help/tutorials/choropleth-studio-gl-pt-2/ --->
+    <!-- Instead of it being a mousemove interaction I tried adding something--->
+    <!-- similar to click. While I was not able to accomplish this succesfully, --->
+    <!-- hopefully this map can be improved and altered to include more relevant infromation --->
+    <p>Ideally, this map would also specify the number of selected water sites for each buffer. What are you thoughts on how this map can be improved? Please provide feedback, questions, or concerns using the contact information below.</p>
+    <!-- Due to the limitations I mentioned above, I am also adding a point of --->
+    <!-- contact for users. Ideally, this would be an organization's contact --->
+    <!-- information. I also thought using a forum or survey as we had done with AGOL --->
+    <!-- could be helpful, although I thought keeping this simple and more straight --->
+    <!-- forward with links to contacts would be useful. Additionally, a survey --->
+    <!-- should be carefully constucted with a team of people, especiially in --->
+    <!-- working in sensitive areas, hence why this web map does not include one --->
+    <h3>Contact</h3>
+    <!-- These contacts are listed in place of what really should be organization contact information--->
+    <a href="https://www.linkedin.com/in/caroline-ann-williams-research-assistant-tech-support/"><i class="fa fa-linkedin"></i></a>
+    <a href="https://github.com/cawilliams719"><i class="fa fa-github"></i></a>
   </div>
   <script>
     // Data showing water points - replace the dummy URL with your own.
@@ -53,6 +130,7 @@
       zoom: 14, // starting zoom
     });
 
+    // Style-wise, I kept the primary color theme as I think it works okay
     map.on('load', function () {
       // Map layers go here!
       map.addLayer({
@@ -63,7 +141,7 @@
         },
         type: 'circle',
         paint: {
-          'circle-color': '#83e8fc',
+          'circle-color': '#83e8fc', // change point colors
           'circle-radius': 3,
           'circle-opacity': 1,
           'circle-stroke-width': 1,
@@ -73,14 +151,14 @@
       // When the map has finished loading, add a new layer that will be empty
       // at first, but will eventually house our confirmed water sites.
       map.addLayer({
-        id: 'selected-water',
+        id: 'selected_water',
         source: {
           type: 'geojson',
           data: { "type": "FeatureCollection", "features": [] }
         },
         type: 'circle',
         paint: {
-          'circle-color': 'red',
+          'circle-color': 'red', // change highlighted water site colors
           'circle-radius': 3
            }
       });
@@ -93,8 +171,8 @@
         },
         type: 'fill',
         paint: {
-          'fill-color': '#fcf683',
-          'fill-opacity': 0.5
+          'fill-color': '#fcf683', // change buffer color
+          'fill-opacity': 0.45 // alter transparency of buffer
         }
       });
     });
@@ -105,10 +183,9 @@
           var searchRadius = makeRadius(eventLngLat, 500);
           map.getSource('search-radius').setData(searchRadius);
           var featuresInBuffer = spatialJoin('OSM-water', searchRadius);
-          map.getSource('selected-water').setData(turf.featureCollection(featuresInBuffer));
+          map.getSource('selected_water').setData(turf.featureCollection(featuresInBuffer));
           //console.log(eventLngLat)
-        });
-
+            });
     //makeRadius function goes here!
     function makeRadius(lngLatArray, radiusInMeters) {
         var point = turf.point(lngLatArray);
@@ -128,6 +205,21 @@
 
       return joined;
     };
+
+    // Add controls to improve functionality and better identiy the users location in respect to stand alone water sites
+    // Add pan and zoom controls: https://docs.mapbox.com/mapbox-gl-js/api/#map#addcontrol
+    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+
+    // Add a geolocation button: https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol
+    map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true
+      },
+      trackUserLocation: true
+    }),
+    'bottom-right'
+    );
+
   </script>
 
 </body>
